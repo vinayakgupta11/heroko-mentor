@@ -2,7 +2,7 @@
   "name": "mentorplatform",
   "version": "1.0.0",
   "description": "Mentorship Platform where Mentors and Mentees can find each other.",
-  "main": "app.js",
+  "main": "index.js",
   "engines": {
     "node": "10.16.3",
     "npm": "6.14.11"
