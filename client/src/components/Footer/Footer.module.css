@@ -1,0 +1,30 @@
+.Footer{
+    background: royalblue;
+    padding: 3rem;
+    color: white;
+}
+.NavigationItems{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+.NavigationItem {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+  }
+  .NavigationItem a {
+    color:white;
+    text-decoration: none;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+  }
+  .NavigationItem a:hover,
+  .NavigationItem a:active,
+  .NavigationItem a.active{
+      color:#40A4C8
+  }
