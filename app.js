@@ -2,16 +2,15 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const app = express();
-const port = 3000;
 const pool = require('./db-connection');
 var cors = require("cors");
 const jwtGenerator = require('./jwtGenerator');
 const authorize = require('./authorization');
 var nodemailer = require('nodemailer');
+const path= require("path");
 const jwt = require('jsonwebtoken');
+const PORT = process.env.PORT || 3000;
 require('dotenv').config();
-
-
 app.use(cors());
 app.use(bodyParser.json())
 app.use(
@@ -19,6 +18,10 @@ app.use(
         extended: true,
     })
 )
+//app.use(express.static(path.join(__dirname,"client/build")));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname,"client/build")));
+}
 
 // Sign Up
 app.post(['/register/mentor', '/register/mentee'], async (request, response) => {
@@ -478,7 +481,10 @@ app.post('/events', (req, res) => {
 app.get('/', (request, response) => {
     response.json({ info: 'API running' });
 })
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client/build/index.html"));
+  });
 
-app.listen(port, () => {
-    console.log(`App running on port ${port} `);
+app.listen(PORT, () => {
+    console.log(`App running on port ${PORT} `);
 })
