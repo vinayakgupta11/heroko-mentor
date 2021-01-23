@@ -184,14 +184,28 @@ app.post(['/mentor/send-email', '/mentee/send-email'], async (request, response)
                 pass: 'mentor@12'
             }
         });
+        var mailOptions;
+        if (process.env.NODE_ENV === "production") {
+             mailOptions = {
+                from: 'mplatform009@gmail.com',
+                to: email,
+                subject: 'RESET PASSWORD LINK',
+    
+                html: `<h3>Hey ${newuser.name},</h3><h4>Please click on the below link to reset your MyMentor password: </h4><p>http://my-mentor-platform.herokuapp.com//resetpassword/${table}/${token}</p><p> Regards, <br/>MyMentor Team</p>`
+            };
+          }
+          else
+          {
+            mailOptions = {
+                from: 'mplatform009@gmail.com',
+                to: email,
+                subject: 'RESET PASSWORD LINK',
+    
+                html: `<h3>Hey ${newuser.name},</h3><h4>Please click on the below link to reset your MyMentor password: </h4><p>${process.env.CLIENT_URL}/resetpassword/${table}/${token}</p><p> Regards, <br/>MyMentor Team</p>`
+            };
+          }
 
-        var mailOptions = {
-            from: 'mplatform009@gmail.com',
-            to: email,
-            subject: 'RESET PASSWORD LINK',
-
-            html: `<h3>Hey ${newuser.name},</h3><h4>Please click on the below link to reset your MyMentor password: </h4><p>${process.env.CLIENT_URL}/resetpassword/${table}/${token}</p><p> Regards, <br/>MyMentor Team</p>`
-        };
+     
 
 
         transport.sendMail(mailOptions, function (err, info) {
