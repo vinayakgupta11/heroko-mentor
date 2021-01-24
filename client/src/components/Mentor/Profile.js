@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import {
     FormControl, TextField, Button, Typography, Grid, Container, Avatar, IconButton,
     List,
     ListItem,
-    ListItemSecondaryAction,
+    ListItemSecondaryAction
 } from '@material-ui/core';
+
 import { MuiPickersUtilsProvider, KeyboardDateTimePicker } from "@material-ui/pickers";
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
@@ -43,7 +45,6 @@ const MentorProfile = (props) => {
     const classes = useStyles();
     const menteeData = {
         jobTitle: '',
-        category: '',
         pricePerSession: '',
         bio: '',
         company: '',
@@ -53,6 +54,23 @@ const MentorProfile = (props) => {
         mobileNumber: '',
         timeDate: ''
     };
+
+    const roleCategory = [
+        {
+            category: 'Software-Development'
+        },
+        {
+            category: 'Ux-Design'
+        },
+        {
+            category: 'Data-Science'
+        },
+        {
+            category: 'Product-Management'
+        }
+    ]
+    const [catList, setCatList] = useState(roleCategory);
+    const [cat, setCat] = useState(null);
 
     useEffect(() => {
         getMentorData();
@@ -100,10 +118,8 @@ const MentorProfile = (props) => {
             headers: headers
         })
             .then(function (response) {
-               
                 const menteeData = {
                     jobTitle: response.data.user_data.job_title,
-                    category: response.data.user_data.category,
                     pricePerSession: response.data.user_data.price,
                     bio: response.data.user_data.bio,
                     company: response.data.user_data.company,
@@ -114,6 +130,7 @@ const MentorProfile = (props) => {
                 };
                 handleDateChange(response.data.user_data.date_time);
                 setFormData(menteeData);
+                setCat({category:response.data.user_data.category});
 
             })
             .catch(function (error) {
@@ -126,7 +143,7 @@ const MentorProfile = (props) => {
         const data = {
             job_title: formData.jobTitle,
             company: formData.company,
-            category: formData.category,
+            category: cat.category,
             tags: tagData,
             price: formData.pricePerSession,
             experience: formData.experience,
@@ -137,10 +154,8 @@ const MentorProfile = (props) => {
             linkedin: "",
             date_time: (selectedDate),
         }
-
-      
         const id = localStorage.getItem('Mentorid');
-        const token= localStorage.getItem('Mentortoken');
+        const token = localStorage.getItem('Mentortoken');
         const headers = {
             'Content-Type': 'application/json',
             'id': id,
@@ -152,7 +167,7 @@ const MentorProfile = (props) => {
             headers: headers
         })
             .then(function (response) {
-               
+
                 props.history.push('/mentee-req');
             })
             .catch(function (error) {
@@ -229,17 +244,18 @@ const MentorProfile = (props) => {
                         </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={9}>
-                        <FormControl fullWidth margin="normal" variant="outlined">
-                            <TextField
-                                required
-                                id="category"
-                                label="Category"
-                                color="primary"
-                                variant="outlined"
-                                value={formData.category}
-                                onChange={handleTextChange}
-                            />
-                        </FormControl>
+
+                        <Autocomplete
+                            id="category"
+                            value={cat}
+                            options={catList}
+                            getOptionLabel={option => option.category}
+                            onChange={(e, newValue) => setCat(newValue)}
+                            renderInput={params => (
+                                <TextField  {...params} label="Category"  variant="outlined" />
+                            )}
+                        />
+
                     </Grid>
                     <Grid item xs={12} sm={9}>
                         <FormControl fullWidth margin="normal" variant="outlined">
