@@ -121,6 +121,7 @@ const MenteeReq = (props) => {
             headers: headers
         })
             .then(function (response) {
+                props.onMessage('Slot Booked', 'success');
                 setSlot(!slot);
                 let data = {
                     date: eventSlots[0].eventDate,
@@ -131,6 +132,7 @@ const MenteeReq = (props) => {
                 }
                 axios.post('/events', data).then(function (res) {
                 }).catch(function(error){
+                    props.onMessage('Something Went Wrong', 'error');
                     console.log('err', error);
                 })
             })

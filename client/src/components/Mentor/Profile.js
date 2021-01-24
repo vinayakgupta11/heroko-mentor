@@ -167,10 +167,11 @@ const MentorProfile = (props) => {
             headers: headers
         })
             .then(function (response) {
-
+                props.onMessage('Your Profile has been Updated', 'success');
                 props.history.push('/mentee-req');
             })
             .catch(function (error) {
+                props.onMessage('Something Went Wrong', 'error');
                 console.log(error);
             });
     }

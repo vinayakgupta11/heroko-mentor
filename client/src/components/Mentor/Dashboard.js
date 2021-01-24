@@ -7,6 +7,7 @@ import PublicIcon from '@material-ui/icons/Public';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Loader from '../../hoc/Loader';
 import axios from "axios";
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Dashboard = (props) => {
+    const [loading, setLoading] = useState(true);
     let FinalDateTime = [];
     const MentorId = props.location.state.id;
     const Mentortoken = localStorage.getItem('Mentortoken');
@@ -124,6 +126,7 @@ const Dashboard = (props) => {
                     image: avatarImage
                 };
                 setMentorData(mentorData)
+                setLoading(false);
                
 
             })
@@ -209,149 +212,149 @@ const Dashboard = (props) => {
 
 
     return (
-        MentorData ? (<Container style={{ marginBottom: "40px" }}>
-            {isTablet ? (
-                <Grid container sm={12} spacing={2}>
-                    <Grid container sm={12} xs={12} >
-                        <Paper style={{ display: "flex", flexDirection: 'column' }} classes={{ root: classes.root }}>
-                            <Container>
-                                <Grid item container direction="row" style={{ marginTop: "15px", marginBottom: "15px" }} spacing={1}>
-                                    <Grid item sm={2} xs={6}>
-                                        <Avatar src="" className={classes.large} >
-                                            <Typography color="primary" >{MentorData.image[0]}{MentorData.image[1]}</Typography>
-                                        </Avatar>
+        loading ? <Loader/> :  (<Container style={{ marginBottom: "40px" }}>
+        {isTablet ? (
+            <Grid container sm={12} spacing={2}>
+                <Grid container sm={12} xs={12} >
+                    <Paper style={{ display: "flex", flexDirection: 'column' }} classes={{ root: classes.root }}>
+                        <Container>
+                            <Grid item container direction="row" style={{ marginTop: "15px", marginBottom: "15px" }} spacing={1}>
+                                <Grid item sm={2} xs={6}>
+                                    <Avatar src="" className={classes.large} >
+                                        <Typography color="primary" >{MentorData.image[0]}{MentorData.image[1]}</Typography>
+                                    </Avatar>
+                                </Grid>
+                                <Grid item sm={4} xs={6} style={{ alignSelf: 'center' }}>
+                                    <Typography color="primary" variant="h6">{MentorData.name}</Typography>
+                                </Grid>
+                                <Grid item sm={6} xs={12} spacing={4} style={{ alignSelf: 'center' }}>
+                                    <Typography color="primary" variant="h6">{MentorData.jobTitle} At {MentorData.company}</Typography>
+                                </Grid>
+                            </Grid>
+                            <Grid item container xs={12} sm={12} direction="row" justify="space-between">
+                                <Grid item>
+                                    {MentorData.tags && MentorData.tags[0] ? <Typography color="primary" className={classes.borderStyling}>{MentorData.tags[0]}</Typography> : null}
+                                </Grid>
+                                <Grid item>
+                                    {MentorData.tags && MentorData.tags[1] ? <Typography color="primary" className={classes.borderStyling}>{MentorData.tags[1]}</Typography> : null}
+                                </Grid>
+                                {!isMobile ? (<Grid item>
+                                    {MentorData.tags && MentorData.tags[2] ? <Typography color="primary" className={classes.borderStyling}>{MentorData.tags[2]}</Typography> : null}
+                                </Grid>) : null}
+                            </Grid>
+
+                            <Grid item sm={12} style={{ marginTop: '10px' }}>
+                                <Typography color="primary" >{MentorData.bio}</Typography>
+                            </Grid>
+                            <Grid item container direction="row" style={{ margin: "15px 0 15px 0" }}>
+                                <Grid item container sm={8} xs={12} direction="row" justify="space-between">
+                                    <Grid item>
+                                        <InstagramIcon />
                                     </Grid>
-                                    <Grid item sm={4} xs={6} style={{ alignSelf: 'center' }}>
-                                        <Typography color="primary" variant="h6">{MentorData.name}</Typography>
+                                    <Grid item>
+                                        <FacebookIcon />
                                     </Grid>
-                                    <Grid item sm={6} xs={12} spacing={4} style={{ alignSelf: 'center' }}>
-                                        <Typography color="primary" variant="h6">{MentorData.jobTitle} At {MentorData.company}</Typography>
+                                    <Grid item>
+                                        <TwitterIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <PublicIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <LinkedInIcon />
                                     </Grid>
                                 </Grid>
-                                <Grid item container xs={12} sm={12} direction="row" justify="space-between">
+                            </Grid>
+
+                            <Grid item sm={12} style={{ marginTop: '30px' }}>
+                                <Typography color="primary" variant="h6" >Slots Available</Typography>
+                            </Grid>
+                            <Grid item container sm={12} direction="row" spacing={2} style={{ marginBottom: '30px', marginTop: "10px" }}>
+                                <Grid item container sm={12} justify="space-between" spacing={2}>
+                                    {renderSlots()}
+                                </Grid>
+                                <Grid item sm={12} style={{ paddingLeft: "10%" }}>
+                                    <Button variant="contained" color="primary" onClick={SlotBooked}>Book</Button>
+                                </Grid>
+                            </Grid>
+                        </Container>
+                    </Paper>
+                </Grid>
+            </Grid>
+        )
+            :
+
+
+            (<Grid container sm={12} justify="center">
+                <Grid item sm={2} container justify="flex-end" alignContent="center">
+                    <Avatar src="" className={classes.large} >
+                        <Typography color="primary" variant="h2">{MentorData.image[0]}{MentorData.image[1]}</Typography>
+                    </Avatar>
+                </Grid>
+                <Grid item sm={8} >
+                    <Paper style={{ display: "flex", flexDirection: 'column' }} classes={{ root: classes.root }}>
+                        <Container>
+                            <Grid item container direction="row" style={{ marginTop: "15px" }}>
+                                <Grid item sm={4} >
+                                    <Typography color="primary" variant="h6">{MentorData.name}</Typography>
+                                </Grid>
+                                <Grid item container sm={8} direction="row" justify="space-evenly">
                                     <Grid item>
                                         {MentorData.tags && MentorData.tags[0] ? <Typography color="primary" className={classes.borderStyling}>{MentorData.tags[0]}</Typography> : null}
                                     </Grid>
                                     <Grid item>
                                         {MentorData.tags && MentorData.tags[1] ? <Typography color="primary" className={classes.borderStyling}>{MentorData.tags[1]}</Typography> : null}
                                     </Grid>
-                                    {!isMobile ? (<Grid item>
+                                    <Grid item>
                                         {MentorData.tags && MentorData.tags[2] ? <Typography color="primary" className={classes.borderStyling}>{MentorData.tags[2]}</Typography> : null}
-                                    </Grid>) : null}
-                                </Grid>
+                                    </Grid>
 
-                                <Grid item sm={12} style={{ marginTop: '10px' }}>
-                                    <Typography color="primary" >{MentorData.bio}</Typography>
                                 </Grid>
-                                <Grid item container direction="row" style={{ margin: "15px 0 15px 0" }}>
-                                    <Grid item container sm={8} xs={12} direction="row" justify="space-between">
-                                        <Grid item>
-                                            <InstagramIcon />
-                                        </Grid>
-                                        <Grid item>
-                                            <FacebookIcon />
-                                        </Grid>
-                                        <Grid item>
-                                            <TwitterIcon />
-                                        </Grid>
-                                        <Grid item>
-                                            <PublicIcon />
-                                        </Grid>
-                                        <Grid item>
-                                            <LinkedInIcon />
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
+                            </Grid>
 
-                                <Grid item sm={12} style={{ marginTop: '30px' }}>
-                                    <Typography color="primary" variant="h6" >Slots Available</Typography>
-                                </Grid>
-                                <Grid item container sm={12} direction="row" spacing={2} style={{ marginBottom: '30px', marginTop: "10px" }}>
-                                    <Grid item container sm={12} justify="space-between" spacing={2}>
-                                        {renderSlots()}
+                            <Grid item sm={12}>
+                                <Typography color="primary" variant="h6">{MentorData.jobTitle} At {MentorData.company}</Typography>
+                            </Grid>
+                            <Grid item sm={12} >
+                                <Typography color="primary" >{MentorData.bio}</Typography>
+                            </Grid>
+                            <Grid item container direction="row" style={{ margin: "15px 0 15px 0" }}>
+                                <Grid item container sm={8} xs={6} direction="row" justify="space-between">
+                                    <Grid item>
+                                        <InstagramIcon />
                                     </Grid>
-                                    <Grid item sm={12} style={{ paddingLeft: "10%" }}>
-                                        <Button variant="contained" color="primary" onClick={SlotBooked}>Book</Button>
+                                    <Grid item>
+                                        <FacebookIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <TwitterIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <PublicIcon />
+                                    </Grid>
+                                    <Grid item>
+                                        <LinkedInIcon />
                                     </Grid>
                                 </Grid>
-                            </Container>
-                        </Paper>
-                    </Grid>
+                            </Grid>
+                            <Grid item sm={12} style={{ marginTop: '30px' }}>
+                                <Typography color="primary" variant="h6" >Slots Available</Typography>
+                            </Grid>
+
+
+                            <Grid item container sm={12} direction="row" style={{ marginBottom: '30px', marginTop: "10px" }}>
+                                <Grid item container sm={8} justify="space-between" spacing={2}>
+                                    {renderSlots()}
+                                </Grid>
+                                <Grid item sm={4} style={{ paddingLeft: "10%" }}>
+                                    <Button variant="contained" color="primary" onClick={SlotBooked}>Book</Button>
+                                </Grid>
+                            </Grid>
+                        </Container>
+                    </Paper>
                 </Grid>
-            )
-                :
-
-
-                (<Grid container sm={12} justify="center">
-                    <Grid item sm={2} container justify="flex-end" alignContent="center">
-                        <Avatar src="" className={classes.large} >
-                            <Typography color="primary" variant="h2">{MentorData.image[0]}{MentorData.image[1]}</Typography>
-                        </Avatar>
-                    </Grid>
-                    <Grid item sm={8} >
-                        <Paper style={{ display: "flex", flexDirection: 'column' }} classes={{ root: classes.root }}>
-                            <Container>
-                                <Grid item container direction="row" style={{ marginTop: "15px" }}>
-                                    <Grid item sm={4} >
-                                        <Typography color="primary" variant="h6">{MentorData.name}</Typography>
-                                    </Grid>
-                                    <Grid item container sm={8} direction="row" justify="space-evenly">
-                                        <Grid item>
-                                            {MentorData.tags && MentorData.tags[0] ? <Typography color="primary" className={classes.borderStyling}>{MentorData.tags[0]}</Typography> : null}
-                                        </Grid>
-                                        <Grid item>
-                                            {MentorData.tags && MentorData.tags[1] ? <Typography color="primary" className={classes.borderStyling}>{MentorData.tags[1]}</Typography> : null}
-                                        </Grid>
-                                        <Grid item>
-                                            {MentorData.tags && MentorData.tags[2] ? <Typography color="primary" className={classes.borderStyling}>{MentorData.tags[2]}</Typography> : null}
-                                        </Grid>
-
-                                    </Grid>
-                                </Grid>
-
-                                <Grid item sm={12}>
-                                    <Typography color="primary" variant="h6">{MentorData.jobTitle} At {MentorData.company}</Typography>
-                                </Grid>
-                                <Grid item sm={12} >
-                                    <Typography color="primary" >{MentorData.bio}</Typography>
-                                </Grid>
-                                <Grid item container direction="row" style={{ margin: "15px 0 15px 0" }}>
-                                    <Grid item container sm={8} xs={6} direction="row" justify="space-between">
-                                        <Grid item>
-                                            <InstagramIcon />
-                                        </Grid>
-                                        <Grid item>
-                                            <FacebookIcon />
-                                        </Grid>
-                                        <Grid item>
-                                            <TwitterIcon />
-                                        </Grid>
-                                        <Grid item>
-                                            <PublicIcon />
-                                        </Grid>
-                                        <Grid item>
-                                            <LinkedInIcon />
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid item sm={12} style={{ marginTop: '30px' }}>
-                                    <Typography color="primary" variant="h6" >Slots Available</Typography>
-                                </Grid>
-
-
-                                <Grid item container sm={12} direction="row" style={{ marginBottom: '30px', marginTop: "10px" }}>
-                                    <Grid item container sm={8} justify="space-between" spacing={2}>
-                                        {renderSlots()}
-                                    </Grid>
-                                    <Grid item sm={4} style={{ paddingLeft: "10%" }}>
-                                        <Button variant="contained" color="primary" onClick={SlotBooked}>Book</Button>
-                                    </Grid>
-                                </Grid>
-                            </Container>
-                        </Paper>
-                    </Grid>
-                </Grid>)}
-        </Container>) : null
+            </Grid>)}
+    </Container>)
 
     )
 }

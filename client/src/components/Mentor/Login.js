@@ -43,12 +43,13 @@ const Login = (props) => {
       
         axios.post('/login/mentor', data)
             .then(function (response) {
-               
+                props.onMessage('You have been logged in', 'success');
                 localStorage.setItem('Mentortoken', response.data.token);
                 localStorage.setItem('Mentorid', response.data.user_data.id);
                 response.data.user_data.status ? props.history.push('/mentee-req') : props.history.push('/mentor-profile');
             })
             .catch(function (error) {
+                props.onMessage('Incorrect username or password', 'error');
                 console.log(error);
             });
     }
@@ -123,10 +124,11 @@ const Login = (props) => {
        
         axios.post('/mentor/send-email', data)
             .then(function (response) {
-              
+                props.onMessage('Reset Link has been sent to your Email', 'success');
                 setOpen(false);
             })
             .catch(function (error) {
+                props.onMessage('Please Enter Valid Email', 'error');
                 console.log(error);
             });
 

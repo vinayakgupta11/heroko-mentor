@@ -43,12 +43,13 @@ const Login = (props) => {
         }
         axios.post('/login/mentee', data)
             .then(function (response) {
+                props.onMessage('You have been logged in', 'success');
                 localStorage.setItem('Menteetoken', response.data.token);
                 localStorage.setItem('Menteeid', response.data.user_data.id);
                 props.history.push('/');
             })
-            .catch(function (error) {
-                console.log(error);
+            .catch(e=> {
+                props.onMessage('Incorrect username or password', 'error');
             });
     }
 
@@ -66,7 +67,7 @@ const Login = (props) => {
 
     const handleForgotEmail = (event) => {
         setEmailData(event.target.value);
-       
+
     };
     const ValidatePass = () => {
         if (formData.password === "" || !formData.password) {
@@ -119,13 +120,14 @@ const Login = (props) => {
         const data = {
             email: EmailData,
         }
-        
+
         axios.post('/mentee/send-email', data)
             .then(function (response) {
-                
+                props.onMessage('Reset Link has been sent to your Email', 'success');
                 setOpen(false);
             })
             .catch(function (error) {
+                props.onMessage('Please Enter Valid Email', 'error');
                 console.log(error);
             });
 

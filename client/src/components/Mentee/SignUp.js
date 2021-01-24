@@ -39,13 +39,14 @@ const Signup = (props) => {
       
         axios.post('/register/mentee', data)
             .then(function (response) {
-               
+                props.onMessage('You have been Registered as Mentee', 'success');
                 localStorage.setItem('Menteetoken', response.data.token);
                 localStorage.setItem('Menteeid', response.data.user_data.id);
                 props.history.push('/');
             })
             .catch(function (error) {
                 console.log(error);
+                props.onMessage('Something Went Wrong', 'error');
             });
 
     }

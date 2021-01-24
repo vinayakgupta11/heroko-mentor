@@ -82,12 +82,13 @@ const Signup = (props) => {
        
         axios.post('/register/mentor', data)
             .then(function (response) {
-               
+                props.onMessage('You have been Registered as Mentor', 'success');
                 localStorage.setItem('Mentortoken', response.data.token);
                 localStorage.setItem('Mentorid', response.data.user_data.id);
                 props.history.push('/mentor-profile');
             })
             .catch(function (error) {
+                props.onMessage('Something Went Wrong', 'error');
                 console.log(error);
             });
       

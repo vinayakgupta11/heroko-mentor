@@ -37,9 +37,10 @@ const Reset = (props) => {
             headers: headers
         })
             .then(function (response) {
-               
+                props.onMessage('Your Password has been changed', 'success');
             })
             .catch(function (error) {
+                props.onMessage('Something went Wrong-TokenExpired', 'error');
                 console.log(error);
             });
     }

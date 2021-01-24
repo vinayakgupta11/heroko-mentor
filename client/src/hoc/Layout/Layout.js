@@ -7,7 +7,7 @@ const layout = (props) => {
   return (
     <Aux>
       <Header />
-      <main  className={Classes.footer}>{props.children}</main>
+      <main  className={Classes.footer} >{props.children}</main>
       <Footer />
 
     </Aux>
